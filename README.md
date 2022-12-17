@@ -1,4 +1,4 @@
-# todo_app
+# Open AI CHAT GPT
 
 A new Flutter project.
 
