@@ -47,7 +47,7 @@ class MyHomePage extends StatefulWidget {
 class TodoList extends StatelessWidget {
   final List<Todo> todos;
 
-  TodoList({@required this.todos});
+  TodoList({@required this.todos = const []});
 
   @override
   Widget build(BuildContext context) {
