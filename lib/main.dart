@@ -47,7 +47,7 @@ class MyHomePage extends StatefulWidget {
 class TodoList extends StatelessWidget {
   final List<Todo> todos;
 
-  TodoList({@required this.todos = const []});
+  TodoList({ this.todos = const [] });
 
   @override
   Widget build(BuildContext context) {
@@ -67,11 +67,28 @@ class TodoList extends StatelessWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
+  final _formKey = GlobalKey<FormState>();
+  final titleController = TextEditingController();
+  final descriptionController = TextEditingController();
 
   final todoList = [
     Todo(title: 'Buy milk', description: 'Remember to buy milk at the store'),
     Todo(title: 'Do laundry', description: 'Wash and dry clothes'),
   ];
+
+  void _addTodo() {
+    final form = _formKey.currentState;
+    if (form?.validate() == true) {
+      final title = titleController.text;
+      final description = descriptionController.text;
+      setState(() {
+        todoList.add(Todo(title: title, description: description));
+      });
+      form?.reset();
+    }
+  }
+
+
 
   void _incrementCounter() {
     setState(() {
@@ -85,8 +102,35 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         title: Text(widget.title),
       ),
-      body: TodoList(
-        todos: todoList,
+      body: Column(
+        children: [
+          Form(
+            key: _formKey,
+            child: Column(
+              children: [
+                TextFormField(
+                  controller: titleController,
+                  validator: (value) {
+                    if (value?.isEmpty == true) {
+                      return 'Please enter a title';
+                    }
+                    return null;
+                  },
+                ),
+                TextFormField(
+                  controller: descriptionController,
+                ),
+                ElevatedButton(
+                  onPressed: _addTodo,
+                  child: Text('Add Todo'),
+                ),
+              ],
+            ),
+          ),
+          TodoList(
+            todos: todoList,
+          ),
+        ],
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: _incrementCounter,
